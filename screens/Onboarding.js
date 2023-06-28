@@ -12,6 +12,7 @@ import { COLORS } from "../theme/colors";
 import { TYPOGRAPHY } from "../theme/typography";
 import { isValidEmail } from "../utils";
 import { storeData } from "../storage/async";
+import { appBus } from "../event-bus/app-bus";
 
 export default function Onboarding() {
   const [firstName, setFirstName] = useState("");
@@ -23,6 +24,7 @@ export default function Onboarding() {
     storeData("firstName", firstName);
     storeData("email", email);
     storeData("onboardingComplete", true);
+    appBus.emit("onboardingComplete");
   };
 
   return (

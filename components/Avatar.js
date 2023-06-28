@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   placeholderLabel: {
-    ...TYPOGRAPHY.heading,
+    ...TYPOGRAPHY.sectionHeader,
+    fontSize: 20,
     color: "white",
     textAlign: "center",
   },

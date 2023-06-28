@@ -98,6 +98,7 @@ export default function Profile() {
     storeData("avatar", null);
     storeData("onboardingComplete", false);
     appBus.emit("profile-updated");
+    appBus.emit("onboardingComplete");
   };
 
   return (
@@ -151,7 +152,7 @@ export default function Profile() {
         <CheckBoxInput label="Special offers" />
         <CheckBoxInput label="Newsletter" />
       </View>
-      <Button>Log out</Button>
+      <Button onPress={clearData}>Log out</Button>
       <View style={styles.buttonsContainer}>
         <Button type="outline" onPress={loadData}>
           Discard changes
@@ -223,7 +224,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   placeholderLabel: {
-    ...TYPOGRAPHY.heading,
+    ...TYPOGRAPHY.sectionHeader,
+    fontSize: 40,
     color: "white",
     textAlign: "center",
   },

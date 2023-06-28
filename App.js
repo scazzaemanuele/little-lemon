@@ -11,6 +11,7 @@ import { useFontLoader } from "./hooks/useFontLoader";
 import { getData } from "./storage/async";
 import { Header } from "./components/Header";
 import Avatar from "./components/Avatar";
+import { appBus } from "./event-bus/app-bus";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,10 +24,15 @@ export default function App() {
   const [fontsLoaded] = useFontLoader();
 
   useEffect(() => {
-    getData("onboardingComplete").then((value) => {
-      setIsOnboardingComplete(value);
-      setIsLoading(false);
-    });
+    const checkOnboaringStatus = () => {
+      getData("onboardingComplete").then((value) => {
+        setIsOnboardingComplete(value);
+        setIsLoading(false);
+      });
+    };
+    checkOnboaringStatus();
+    const unsubscribe = appBus.on("onboardingComplete", checkOnboaringStatus);
+    return () => unsubscribe();
   }, []);
 
   const onLayoutRootView = useCallback(async () => {
@@ -50,14 +56,14 @@ export default function App() {
               headerRight: Avatar,
             }}
           >
-            {isOnboardingComplete && (
+            {!isOnboardingComplete && (
               <Stack.Screen
                 name="Onboarding"
                 component={Onboarding}
                 options={{ headerShown: false }}
               />
             )}
-            {!isOnboardingComplete && (
+            {isOnboardingComplete && (
               <Stack.Screen name="Profile" component={Profile} />
             )}
           </Stack.Navigator>
