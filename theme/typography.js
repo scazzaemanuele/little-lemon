@@ -17,4 +17,16 @@ export const TYPOGRAPHY = StyleSheet.create({
     fontFamily: "Karla-Medium",
     fontSize: 18,
   },
+  cardTitle: {
+    fontFamily: "Karla-Bold",
+    fontSize: 18,
+  },
+  cardBody: {
+    fontFamily: "Karla-Regular",
+    fontSize: 16,
+  },
+  cardPrice: {
+    fontFamily: "Karla-Medium",
+    fontSize: 20,
+  },
 });

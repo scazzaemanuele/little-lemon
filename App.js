@@ -1,17 +1,18 @@
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { useCallback, useEffect, useState } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Onboarding from "./screens/Onboarding";
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Profile from "./screens/Profile";
-import { useFontLoader } from "./hooks/useFontLoader";
-import { getData } from "./storage/async";
-import { Header } from "./components/Header";
 import Avatar from "./components/Avatar";
+import { Header } from "./components/Header";
 import { appBus } from "./event-bus/app-bus";
+import { useFontLoader } from "./hooks/useFontLoader";
+import Home from "./screens/Home";
+import Onboarding from "./screens/Onboarding";
+import Profile from "./screens/Profile";
+import { getData } from "./storage/async";
 
 const Stack = createNativeStackNavigator();
 
@@ -54,6 +55,7 @@ export default function App() {
             screenOptions={{
               headerTitle: Header,
               headerRight: Avatar,
+              headerTitleAlign: "center",
             }}
           >
             {!isOnboardingComplete && (
@@ -64,7 +66,10 @@ export default function App() {
               />
             )}
             {isOnboardingComplete && (
-              <Stack.Screen name="Profile" component={Profile} />
+              <>
+                <Stack.Screen name="Home" component={Home} />
+                <Stack.Screen name="Profile" component={Profile} />
+              </>
             )}
           </Stack.Navigator>
         </NavigationContainer>

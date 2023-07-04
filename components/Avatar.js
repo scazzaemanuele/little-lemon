@@ -1,14 +1,16 @@
-import { Image, Text, View, StyleSheet } from "react-native";
+import { Image, Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import { useState, useEffect } from "react";
 import { getData } from "../storage/async";
 import { COLORS } from "../theme/colors";
 import { TYPOGRAPHY } from "../theme/typography";
 import { appBus } from "../event-bus/app-bus";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Avatar() {
   const [image, setImage] = useState(null);
   const [firstName, setFirstName] = useState(null);
   const [lastName, setLastName] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const loadData = () => {
@@ -22,7 +24,7 @@ export default function Avatar() {
     return () => unsubscribe();
   }, []);
 
-  return image ? (
+  const Component = image ? (
     <Image source={{ uri: image }} style={styles.avatar} resizeMode="contain" />
   ) : (
     <View style={styles.avatarPlaceholder}>
@@ -31,6 +33,12 @@ export default function Avatar() {
         {lastName?.[0]?.toUpperCase()}
       </Text>
     </View>
+  );
+
+  return (
+    <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+      {Component}
+    </TouchableOpacity>
   );
 }
 
