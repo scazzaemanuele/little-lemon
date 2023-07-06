@@ -6,11 +6,13 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from "react-native";
 import { useCallback, useEffect, useState } from "react";
 import { TYPOGRAPHY } from "../theme/typography";
 import { COLORS } from "../theme/colors";
 import { filterByQueryAndCategories, getItems, setItems } from "../db/sqlite";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const categories = ["starters", "mains", "desserts", "sides"];
 
@@ -20,10 +22,17 @@ const getImageUri = (imageFileName) =>
 export default function Home() {
   const [menu, setMenu] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [query, setQuery] = useState("");
 
   useEffect(() => {
-    filterByQueryAndCategories("", selectedCategories).then(setMenu);
-  }, [selectedCategories]);
+    const getData = setTimeout(() => {
+      filterByQueryAndCategories(query.trim(), selectedCategories).then(
+        setMenu
+      );
+    }, 500);
+
+    return () => clearTimeout(getData);
+  }, [selectedCategories, query]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -101,6 +110,39 @@ export default function Home() {
 
   return (
     <>
+      <View style={styles.hero}>
+        <View style={styles.heroHeading}>
+          <Text style={styles.heroTitle}>Little Lemon</Text>
+          <Text style={styles.heroSubtitle}>Chicago</Text>
+        </View>
+        <View style={styles.heroContent}>
+          <Text style={styles.heroContentText}>
+            We are a family owned Mediterranean restaurant, focused on
+            traditional recipes served with a modern twist.
+          </Text>
+          <Image
+            style={styles.heroImage}
+            source={require("../assets/Hero_image.png")}
+            resizeMode="cover"
+            width={200}
+            height={200}
+          />
+        </View>
+        <View style={styles.searchContainer}>
+          <Ionicons
+            style={styles.searchIcon}
+            name="search"
+            color="black"
+            size={32}
+          />
+          <TextInput
+            style={styles.searchInput}
+            onChangeText={setQuery}
+            value={query}
+          />
+        </View>
+      </View>
+
       <View style={styles.categoriesSection}>
         <Text style={styles.categoriesTitle}>Order for delivery</Text>
         <ScrollView
@@ -114,7 +156,6 @@ export default function Home() {
           ))}
         </ScrollView>
       </View>
-
       <FlatList
         data={menu}
         keyExtractor={keyExtractor}
@@ -126,6 +167,58 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
+  hero: {
+    backgroundColor: COLORS.accent,
+    padding: 25,
+  },
+  heroHeading: {
+    gap: -20,
+  },
+  heroTitle: {
+    ...TYPOGRAPHY.hero,
+    color: COLORS.brand,
+  },
+  heroSubtitle: {
+    ...TYPOGRAPHY.hero,
+    fontSize: 48,
+    color: "white",
+  },
+  heroContent: {
+    flexDirection: "row",
+    gap: 25,
+  },
+  heroContentText: {
+    ...TYPOGRAPHY.button,
+    color: "white",
+    flex: 1.25,
+    marginTop: 10,
+  },
+  heroImage: {
+    flex: 0.75,
+    maxHeight: 150,
+    borderRadius: 16,
+    marginTop: -35,
+  },
+  searchContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    position: "relative",
+  },
+  searchIcon: {
+    position: "absolute",
+    zIndex: 1,
+    left: 10,
+    top: 27,
+  },
+  searchInput: {
+    flex: 1,
+    backgroundColor: "white",
+    borderRadius: 8,
+    marginTop: 20,
+    paddingHorizontal: 15,
+    paddingLeft: 50,
+    paddingVertical: 10,
+  },
   categoriesSection: {
     paddingVertical: 25,
     borderBottomWidth: 1,

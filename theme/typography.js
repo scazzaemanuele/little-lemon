@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const TYPOGRAPHY = StyleSheet.create({
+  hero: {
+    fontFamily: "Markazi-Regular",
+    fontSize: 64,
+  },
   heading: {
     fontFamily: "Markazi-Bold",
     fontSize: 32,

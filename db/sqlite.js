@@ -60,7 +60,6 @@ export async function filterByQueryAndCategories(query, activeCategories) {
   return new Promise((resolve) => {
     db.transaction((tx) => {
       tx.executeSql(statement, activeCategories, (_, { rows }) => {
-        console.log(rows._array);
         resolve(rows._array);
       });
     });
